@@ -8,7 +8,8 @@
 //
 //
 
-console.log('this is loaded');
+// DEBUG
+// console.log('KEYS.JS is loaded');
 
 exports.spotify = {
   id: process.env.SPOTIFY_ID,
