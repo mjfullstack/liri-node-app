@@ -1,21 +1,44 @@
-
+// KEY Configuration, keys hidden in ENV
 require("dotenv").config();
 var keys = require("./keys.js");
 
-var Spotify = require('node-spotify-api');
-var spotify = new Spotify(keys.spotify);
-console.log ("spotify..."); // gets object
-console.log (spotify); // gets object
-console.log ("spotify.id = " + spotify.credentials.id); // works with ".credentials"
-console.log ("spotify.secret = " + spotify.credentials.secret);
+var inArgv = require("./input_argv.js");
 
-/*********** No Worky Yet, IF ever! Not Needed ***************
-var Omdb = require('node-omdb');
-alert("Click State:Pending");
-var omdb = new Omdb(keys.omdb);
-console.log ("omdb...");
-console.log (omdb);
-console.log ("omdb.key = " + omdb.omdb_key);
-console.log ("omdb.state = " + omdb.state);
- *********** No Worky Yet, IF ever! Not Needed ***************/
-console.log ("keys.omdb.omdb_key = " + keys.omdb.omdb_key); // WORKS
+// OMDb Key
+// ONLY PRINT FOR DEBUG!!!
+// console.log ("keys.omdb.omdb_key = " + keys.omdb.omdb_key); // WORKS
+
+// Re-factoring, separate files per function
+var doSearch = require("./do_searches.js");
+
+var searchParams = inArgv.data.askViaArgv(); // Uses ./input_argv.js
+if ( searchParams ) {
+  // DEBUG
+  // console.log("searchType = " + searchParams[0]);  // WORKS
+  // console.log("searchStr = " + searchParams[1]); // WORKS
+  var searchType = searchParams[0];
+  var searchStr = searchParams[1];
+} else {
+  console.log("Nothing entered... Please try again...");
+  // Need to exit here...
+};
+
+var resultsObj = {};
+if ( searchType ) {
+  switch (searchType) {
+    case "concert-this" :      resultsObj = doSearch.data.getBands(searchStr);
+      break;
+    case "spotify-this-song" : resultsObj = doSearch.data.getSong(searchStr);
+      break;
+    case "movie-this" :        resultsObj = doSearch.data.getMovie(searchStr);
+      break;
+    case "do-what-it-says" : console.log("Getting instrucions from 'random.txt'...")
+      break;
+  }
+  // DEBUG
+  // console.log("resultsObj..."); // Comes back undefined, reason is TBD
+  // console.log(resultsObj);
+} else {
+  console.log("No search specified! Please re-start...");
+}
+
