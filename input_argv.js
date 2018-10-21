@@ -19,7 +19,15 @@ methods.askViaArgv = function () {
       if (process.argv[2] === 'spotify-this-song') {
         // Set Default for when no song is entered...
         if (!process.argv[3]) {
-          searchStr = "The Sign";
+          searchStr = "The Sign"; // Mr. Nobody
+          qAnswers.push(searchStr); // searchStr
+          return qAnswers;
+        }
+      }
+      if (process.argv[2] === 'movie-this') {
+        // Set Default for when no song is entered...
+        if (!process.argv[3]) {
+          searchStr = "Mr. Nobody"; // Default if no title entered
           qAnswers.push(searchStr); // searchStr
           return qAnswers;
         }

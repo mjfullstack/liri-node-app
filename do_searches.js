@@ -5,6 +5,8 @@ require("dotenv").config();
 var moment = require('moment');
 var keys = require("./keys.js");
 var request = require('request');
+// var file = require('file-system');
+var fs = require('fs');
 var Spotify = require('node-spotify-api');
 // var spotify = new Spotify(keys.spotify);
 // ONLY FOR DEBUG!!!
@@ -97,18 +99,40 @@ methods.getMovie = function(movieToSearch) {
   // Form the URL...
   var movieBaseURL = 'http://www.omdbapi.com/';
   var movieKey = '&apikey=' + keys.omdb.omdb_key;
-  var movieReqURL = movieBaseURL + '?t=' + movieToSearch + movieKey
-  console.log("movieReqURL = " + movieReqURL);
+  var movieReqURL = movieBaseURL + '?t=' + movieToSearch + "&plot=full" + movieKey
+  // DEBUG
+  // console.log("movieReqURL = " + movieReqURL);
   // Make request... using callback for now...
   request(movieReqURL, function (error, response, body) {
-    console.log('error:', error); // Print the error if one occurred
-    console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-    // console.log('body:', body);
-    bodyJSON = JSON.parse(body, null, 2)
-    console.log("bodyJSON...");
-    console.log(bodyJSON);
+    // console.log('error:', error); // Print the error if one occurred
+    // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+    body = JSON.parse(body, null, 2)
+    // console.log("body after JSON parse...");
+    // console.log(body);
 // return body; // Have to process it HERE since it returns undefined!
-});
+
+
+    /* Title of the movie.
+    * Year the movie came out.
+    * IMDB Rating of the movie.
+    * Rotten Tomatoes Rating of the movie.
+    * Country where the movie was produced.
+    * Language of the movie.
+    * Plot of the movie.
+    * Actors in the movie.
+    */
+    console.log("\nTitle:\t\t\t" + body.Title);
+    console.log("Year:\t\t\t" + body.Year);
+    console.log("imdbRating:\t\t" + body.imdbRating);
+    // console.log(body.Ratings[0].Source + ":\t" + body.Ratings[0].Value);
+    console.log(body.Ratings[1].Source + ":\t" + body.Ratings[0].Value);
+    console.log("Country:\t\t" + body.Country);
+    console.log("Language:\t\t" + body.Language);
+    console.log("Actors:\t\t\t" + body.Actors);
+    // console.log("Plot:\t\t\t" + body.Plot);
+    console.log("\nPlot:");
+    console.log(body.Plot);
+  });
 }
 
 exports.data = methods;
