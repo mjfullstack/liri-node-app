@@ -114,25 +114,30 @@ methods.getMovie = function(movieToSearch) {
 // do-what-it-says
 methods.getFromFile = function(fileToUse) {
   fs.readFile('./' + fileToUse, function read(err, data) {
-    var content;
     if (err) {
-        throw err;
+      throw err;
     }
-    content = data.toString();
-
+    var content = data.toString();
     // Invoke the next step here however you like
     // console.log(content);   // Put all of the code here (not the best solution)
-    processFile(content);          // Or put the next step in a function and invoke it
+    processFile(content);      // Or put the next step in a function and invoke it
   });
   
   function processFile(content) {
-      console.log(content);
-      var myArr =content.split(',');
-      // console.log("myArr...");
-      // console.log(myArr);
-      var searchType = myArr[0];
-      var searchStr = myArr[1];
-      liri.recursiveCall(searchType, searchStr);
+      var myArr = content.split('\n');
+      myArr = myArr.splice(0, myArr.length-1);
+
+      myArr.map(function(item, index) {
+        mySubArr = item.split(',');
+        var searchType = mySubArr[0];
+        var searchStr = mySubArr[1];
+        console.log("===============================")
+        console.log("searchType = " + searchType);
+        console.log("searchStr = " + searchStr);
+        console.log("- - - - - - - - - - - - - - - -")
+        liri.recursiveCall(searchType, searchStr);
+        console.log("===============================")
+      })
     }    
 };
 

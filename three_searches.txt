@@ -1,0 +1,3 @@
+movie-this,"Gladiator"
+concert-this,"Taylor Swift"
+spotify-this-song,"Power of Love"
