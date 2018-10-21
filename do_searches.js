@@ -1,11 +1,13 @@
 // DEBUG
 // console.log('DO_SEARCHES.JS is loaded');
 
+// Require FILES
+var keys = require("./keys.js");
+var liri = require("./liri.js");
+// Require Packages
 require("dotenv").config();
 var moment = require('moment');
-var keys = require("./keys.js");
 var request = require('request');
-// var file = require('file-system');
 var fs = require('fs');
 var Spotify = require('node-spotify-api');
 // var spotify = new Spotify(keys.spotify);
@@ -66,28 +68,14 @@ methods.getSong = function(songToSearch) {
             limit: 3 })
   .then(function(response) {
     // DEBUG
-    // console.log("Now we got some SPOTIFY SONG DATA(data) to work with"); 
     // console.log(response);
     // respJSON = JSON.parse(response);
     // console.log("respJSON...");
     // console.log(respJSON);
-    // console.log("\nresponse.tracks.items[0]..."); // WORKS
-    // console.log(response.tracks.items[0]); // WORKS
-    // console.log("\nresponse.tracks.items[0].album.artists..."); // WORKS
-    // console.log(response.tracks.items[0].album.artists); // WORKS
-    // console.log("\nresponse.tracks.items[0].album.artists[0]..."); // 
-    // console.log(response.tracks.items[0].album.artists[0]); // WORKS
-    // console.log("\nresponse.tracks.items[0].album.artists[0].external_urls..."); // 
-    // console.log(response.tracks.items[0].album.artists[0].external_urls); // WORKS
-    // console.log("\nresponse.tracks.items[0].album.artists[0].name..."); // 
     console.log("\nArtist(s):\t" + response.tracks.items[0].album.artists[0].name); // WORKS
-    // console.log("\nresponse.tracks.items[0].name..."); // WORKS
     console.log("Song's name:\t" + response.tracks.items[0].name); // WORKS
-    // console.log("\nresponse.tracks.items[0].album.artists[0].external_urls.spotify..."); // 
     console.log("Preview Link:\t" + response.tracks.items[0].album.artists[0].external_urls.spotify); // WORKS
-    // console.log("\nresponse.tracks.items[0].album.name..."); // WORKS
     console.log("Album:\t\t" + response.tracks.items[0].album.name); // WORKS
-// return response; // have to process it HERE since
   })
   .catch(function(err) {
     console.log(err);
@@ -107,20 +95,8 @@ methods.getMovie = function(movieToSearch) {
     // console.log('error:', error); // Print the error if one occurred
     // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
     body = JSON.parse(body, null, 2)
-    // console.log("body after JSON parse...");
-    // console.log(body);
-// return body; // Have to process it HERE since it returns undefined!
+    // return body; // Have to process it HERE since it returns undefined!
 
-
-    /* Title of the movie.
-    * Year the movie came out.
-    * IMDB Rating of the movie.
-    * Rotten Tomatoes Rating of the movie.
-    * Country where the movie was produced.
-    * Language of the movie.
-    * Plot of the movie.
-    * Actors in the movie.
-    */
     console.log("\nTitle:\t\t\t" + body.Title);
     console.log("Year:\t\t\t" + body.Year);
     console.log("imdbRating:\t\t" + body.imdbRating);
@@ -134,5 +110,30 @@ methods.getMovie = function(movieToSearch) {
     console.log(body.Plot);
   });
 }
+
+// do-what-it-says
+methods.getFromFile = function(fileToUse) {
+  fs.readFile('./' + fileToUse, function read(err, data) {
+    var content;
+    if (err) {
+        throw err;
+    }
+    content = data.toString();
+
+    // Invoke the next step here however you like
+    // console.log(content);   // Put all of the code here (not the best solution)
+    processFile(content);          // Or put the next step in a function and invoke it
+  });
+  
+  function processFile(content) {
+      console.log(content);
+      var myArr =content.split(',');
+      // console.log("myArr...");
+      // console.log(myArr);
+      var searchType = myArr[0];
+      var searchStr = myArr[1];
+      liri.recursiveCall(searchType, searchStr);
+    }    
+};
 
 exports.data = methods;

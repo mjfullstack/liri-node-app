@@ -1,7 +1,3 @@
-// KEY Configuration, keys hidden in ENV
-require("dotenv").config();
-var keys = require("./keys.js");
-
 var inArgv = require("./input_argv.js");
 
 // OMDb Key
@@ -23,22 +19,28 @@ if ( searchParams ) {
   // Need to exit here...
 };
 
-var resultsObj = {};
-if ( searchType ) {
-  switch (searchType) {
-    case "concert-this" :      resultsObj = doSearch.data.getBands(searchStr);
-      break;
-    case "spotify-this-song" : resultsObj = doSearch.data.getSong(searchStr);
-      break;
-    case "movie-this" :        resultsObj = doSearch.data.getMovie(searchStr);
-      break;
-    case "do-what-it-says" : console.log("Getting instrucions from 'random.txt'...")
-      break;
+var selectAction = function(searchType, searchStr) {
+  var resultsObj = {};
+  if ( searchType ) {
+    switch (searchType) {
+      case "concert-this":      resultsObj = doSearch.data.getBands(searchStr);
+        break;
+      case "spotify-this-song": resultsObj = doSearch.data.getSong(searchStr);
+        break;
+      case "movie-this":        resultsObj = doSearch.data.getMovie(searchStr);
+        break;
+      case "do-what-it-says":   console.log("\nGetting instrucions from 'random.txt'...")
+        doSearch.data.getFromFile(searchStr); // Search string contains random.txt or user emtered file name
+        break;
+    }
+    // DEBUG
+    // console.log("resultsObj..."); // Comes back undefined, reason is TBD
+    // console.log(resultsObj);
+  } else {
+    console.log("No search specified! Please re-start...");
   }
-  // DEBUG
-  // console.log("resultsObj..."); // Comes back undefined, reason is TBD
-  // console.log(resultsObj);
-} else {
-  console.log("No search specified! Please re-start...");
 }
 
+selectAction(searchType, searchStr);
+
+exports.recursiveCall = selectAction;
