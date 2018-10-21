@@ -1,3 +1,7 @@
+
+// KEY Configuration, keys hidden in ENV
+require("dotenv").config();
+
 // DEBUG
 // console.log('INPUT_ARGV.JS is loaded');
 // console.log("inArgv..."); // WORKS
@@ -19,8 +23,26 @@ methods.askViaArgv = function () {
       if (process.argv[2] === 'spotify-this-song') {
         // Set Default for when no song is entered...
         if (!process.argv[3]) {
-          searchStr = "The Sign";
+          searchStr = "The Sign"; // Mr. Nobody
           qAnswers.push(searchStr); // searchStr
+          return qAnswers;
+        }
+      }
+      if (process.argv[2] === 'movie-this') {
+        // Set Default for when no song is entered...
+        if (!process.argv[3]) {
+          searchStr = "Mr. Nobody"; // Default if no title entered
+          qAnswers.push(searchStr); // searchStr
+          return qAnswers;
+        }
+      }
+      if (process.argv[2] === 'do-what-it-says') {
+        // Set Default for when no song is entered...
+        if (!process.argv[3]) {
+          searchStr = "random.txt"; // Default if no file entered
+          qAnswers.push(searchStr); // searchStr
+          // console.log("qAnswers...");
+          // console.log(qAnswers)
           return qAnswers;
         }
       }
